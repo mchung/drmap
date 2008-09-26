@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'drmap'
+require 'irb'
+
+if __FILE__ == $0
+  Drmap::BeanstalkPool.hosts = ['localhost:11300'] # TODO Should probably make this a command line variable
+  IRB.start(__FILE__)
+end

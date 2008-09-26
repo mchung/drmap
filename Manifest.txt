@@ -1,0 +1,16 @@
+History.txt
+Manifest.txt
+README.txt
+Rakefile
+bin/drirb
+bin/drworker
+examples/send_email.rb
+lib/drmap.rb
+lib/drmap/beanstalk_pool.rb
+lib/drmap/beanstalk_worker.rb
+lib/drmap/drmap_enumerable.rb
+lib/drmap/version.rb
+spec/drmap_spec.rb
+spec/spec.opts
+spec/spec_helper.rb
+tasks/rspec.rake

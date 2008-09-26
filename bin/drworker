@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'drmap'
+
+if __FILE__ == $0
+  host = "localhost:11300"
+  if ARGV[0]
+    host = ARGV[0]
+  end
+  puts "Connecting to #{host}" # TODO Should probably test connection!
+  Drmap::BeanstalkPool.hosts = [host]
+  pool = Drmap::BeanstalkPool.new
+  worker = Drmap::BeanstalkWorker.new(pool)
+  worker.process
+end
