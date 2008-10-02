@@ -11,4 +11,6 @@ end
 
 Dir['tasks/**/*.rake'].each { |rake| load rake }
 
+# I CAN EDIT CODE FROM GITHUB?
+
 # vim: syntax=Ruby
