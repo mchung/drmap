@@ -3,8 +3,33 @@
 require 'rubygems'
 require 'drmap'
 require 'irb'
+require 'open3'
+
+class Beanstalkd
+  def start_daemon
+    puts "Starting beanstalkd"
+
+    fork do
+      Open3::popen3("beanstalkd")
+    end
+  end
+
+  def stop_daemon
+    puts "\nKilling beanstalkd"
+
+    fork do
+      Open3::popen3("killall -9 beanstalkd")
+    end
+  end
+end
 
 if __FILE__ == $0
-  Drmap::BeanstalkPool.hosts = ['localhost:11300'] # TODO Should probably make this a command line variable
-  IRB.start(__FILE__)
+  begin
+    bs = Beanstalkd.new
+    bs.start_daemon
+    Drmap::BeanstalkPool.hosts = ['localhost:11300'] # TODO Should probably make this a command line variable
+    IRB.start(__FILE__)
+  ensure
+    bs.stop_daemon
+  end
 end
