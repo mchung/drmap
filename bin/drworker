@@ -3,12 +3,39 @@
 require 'rubygems'
 require 'drmap'
 
+def start_journeta
+  begin
+    require 'journeta1'
+    journeta = Journeta::Engine.new(:peer_port => (2048+rand(2**8)), :groups => ["drclient"])
+    journeta.start
+    puts "Discovering server..."
+    sleep(5)
+    @peers = journeta.known_peers_in_group("drserver")
+  rescue LoadError
+    @peers = {}
+  end
+end
+
+def discover_server
+  bserver = "localhost:11300"
+  start_journeta
+  if !@peers.empty?
+    peer = @peers[@peers.keys.first]
+    bserver = "#{peer.ip_address}:11300"
+  end
+  bserver
+end
+
 if __FILE__ == $0
-  host = "localhost:11300"
+  host =
   if ARGV[0]
     host = ARGV[0]
+  else
+    host = discover_server
   end
-  puts "Connecting to #{host}" # TODO Should probably test connection!
+
+  puts "Connecting to #{host}"
+  # TODO Should probably test connection!
   Drmap::BeanstalkPool.hosts = [host]
   pool = Drmap::BeanstalkPool.new
   worker = Drmap::BeanstalkWorker.new(pool)

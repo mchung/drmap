@@ -6,17 +6,25 @@ require 'irb'
 require 'open3'
 
 class Beanstalkd
+  
   def start_daemon
     puts "Starting beanstalkd"
-
+    try_journeta
     fork do
       Open3::popen3("beanstalkd")
     end
   end
-
+  
+  def try_journeta
+    begin
+      require 'journeta'
+      Journeta::Engine.new(:peer_port => (2048+rand(2**8)), :groups => ["drserver"]).start
+    rescue
+    end
+  end
+  
   def stop_daemon
     puts "\nKilling beanstalkd"
-
     fork do
       Open3::popen3("killall -9 beanstalkd")
     end
@@ -27,7 +35,8 @@ if __FILE__ == $0
   begin
     bs = Beanstalkd.new
     bs.start_daemon
-    Drmap::BeanstalkPool.hosts = ['localhost:11300'] # TODO Should probably make this a command line variable
+    # TODO Should probably make this a command line variable
+    Drmap::BeanstalkPool.hosts = ['localhost:11300']
     IRB.start(__FILE__)
   ensure
     bs.stop_daemon
