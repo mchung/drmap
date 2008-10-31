@@ -5,13 +5,13 @@ require 'drmap'
 
 def start_journeta
   begin
-    require 'journeta1'
+    require 'journeta'
     journeta = Journeta::Engine.new(:peer_port => (2048+rand(2**8)), :groups => ["drclient"])
     journeta.start
     puts "Discovering server..."
     sleep(5)
     @peers = journeta.known_peers_in_group("drserver")
-  rescue LoadError
+  rescue LoadError => e
     @peers = {}
   end
 end
