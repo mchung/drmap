@@ -5,6 +5,8 @@ require 'pp'
 
 require 'beanstalk-client'
 require 'ruby2ruby'
+require 'parse_tree'
+require 'parse_tree_extensions'
 
 require 'drmap/drmap_enumerable'
 require 'drmap/beanstalk_worker'

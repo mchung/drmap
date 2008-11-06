@@ -12,6 +12,7 @@ def start_journeta
     sleep(5)
     @peers = journeta.known_peers_in_group("drserver")
   rescue LoadError => e
+    puts "Caught exception: #{e.message}"
     @peers = {}
   end
 end
